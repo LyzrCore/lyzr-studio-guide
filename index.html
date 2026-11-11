@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Lyzr Agent Studio - Platform Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lyzr-orange:#FE4B1E; --lyzr-navy:#043E77; --lyzr-stone:#A8A298; --lyzr-offwhite:#FAFAF9; --lyzr-black:#1F2022;
+  --grey-100:#F1F0EE; --grey-200:#E3E1DE; --grey-300:#CFCCC7; --grey-400:#B8B4AD;
+  --grey-600:#8A857C; --grey-700:#6B675F; --grey-800:#4A4744;
+  --font-sans:"Aeonik","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --side:300px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--lyzr-offwhite);color:var(--lyzr-black);font-family:var(--font-sans);font-weight:400;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+b,strong,th,h1,h2,h3,h4{font-weight:400}
+a{color:var(--lyzr-navy);text-decoration:underline;text-decoration-color:var(--grey-300);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--lyzr-navy)}
+.mono,.eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--grey-100);border:1px solid var(--grey-200);padding:1px 5px;border-radius:3px}
+pre{font-family:var(--font-mono);font-size:13px;line-height:1.6;background:var(--lyzr-black);color:var(--lyzr-offwhite);padding:18px 20px;border-radius:4px;overflow-x:auto;margin:18px 0}
+pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+
+/* progress */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--lyzr-orange);z-index:50}
+
+/* sidebar */
+aside{position:fixed;top:0;left:0;bottom:0;width:var(--side);border-right:1px solid var(--grey-200);background:var(--lyzr-offwhite);overflow-y:auto;padding:32px 24px 40px;z-index:20}
+aside .brand{color:var(--grey-700);margin-bottom:6px}
+aside .doc-title{font-size:20px;line-height:1.2;letter-spacing:-.01em;margin:0 0 28px}
+aside ol{list-style:none;margin:0;padding:0}
+aside li a{display:grid;grid-template-columns:34px 1fr;gap:6px;padding:8px 10px 8px 8px;margin:0 -10px 0 -8px;color:var(--grey-800);text-decoration:none;border-left:2px solid transparent;font-size:15px;line-height:1.35}
+aside li a .n{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--grey-600);padding-top:3px}
+aside li a:hover{background:var(--grey-100)}
+aside li a.active{border-left-color:var(--lyzr-navy);color:var(--lyzr-black);background:var(--grey-100)}
+aside li a.done .n{color:var(--lyzr-navy)}
+aside .group{margin:22px 0 6px;color:var(--grey-600)}
+aside .meta{margin-top:30px;padding-top:18px;border-top:1px solid var(--grey-200);color:var(--grey-700);font-size:13px;line-height:1.5}
+
+/* main */
+main{margin-left:var(--side);padding:0 64px 120px}
+.wrap{max-width:860px}
+section.ch{padding:72px 0 24px;border-bottom:1px solid var(--grey-200)}
+section.ch:last-of-type{border-bottom:0}
+.ch-num{color:var(--grey-700);margin-bottom:14px}
+h1{font-size:clamp(44px,5vw,64px);line-height:1;letter-spacing:-.04em;margin:0 0 22px}
+h2{font-size:clamp(32px,3.4vw,42px);line-height:1.08;letter-spacing:-.03em;margin:0 0 18px}
+h3{font-size:23px;line-height:1.3;letter-spacing:-.01em;margin:44px 0 10px}
+h4{font-size:18px;margin:26px 0 6px}
+p{margin:0 0 14px;max-width:66ch}
+.lead{font-size:21px;line-height:1.45;color:var(--grey-800);max-width:60ch;letter-spacing:-.005em}
+ul.clean{margin:0 0 16px;padding-left:20px;max-width:66ch}
+ul.clean li{margin:4px 0}
+ul.clean li::marker{color:var(--grey-400)}
+.muted{color:var(--grey-700)}
+.small{font-size:14px}
+
+/* hero */
+.hero{padding:96px 0 56px;border-bottom:1px solid var(--grey-200)}
+.hero .eyebrow{color:var(--grey-700);margin-bottom:22px}
+.hero h1{font-size:clamp(52px,7vw,92px);line-height:.96;letter-spacing:-.045em;max-width:12ch}
+.hero .lead{margin-top:10px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:40px}
+.hero-meta div{border-top:1px solid var(--lyzr-black);padding-top:10px;min-width:150px}
+.hero-meta .mono{color:var(--grey-700);display:block;margin-bottom:4px}
+
+/* cards & grids */
+.grid{display:grid;gap:14px;margin:20px 0 10px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:#fff;border:1px solid var(--grey-200);border-radius:4px;padding:18px 18px 16px}
+.card .mono{color:var(--grey-700);display:block;margin-bottom:8px}
+.card h4{margin:0 0 6px;font-size:18px}
+.card p{font-size:15px;line-height:1.5;margin:0;color:var(--grey-800)}
+.card .links{margin-top:10px;font-size:14px}
+
+.note{border-left:2px solid var(--lyzr-navy);background:#fff;padding:14px 18px;margin:20px 0;max-width:72ch}
+.note .mono{color:var(--lyzr-navy);display:block;margin-bottom:6px}
+.note p{margin:0 0 6px;font-size:15.5px}
+.note p:last-child{margin:0}
+
+/* tables */
+.tbl{overflow-x:auto;margin:18px 0 22px;border:1px solid var(--grey-200);border-radius:4px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.45}
+th{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em;font-size:11px;color:var(--grey-700);text-align:left;padding:11px 14px;border-bottom:1px solid var(--grey-200);background:var(--grey-100);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--grey-200);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{color:var(--lyzr-black)}
+td .mono{font-size:11px}
+
+/* docs links row */
+.docs{margin:22px 0 0;padding:14px 0 0;border-top:1px dashed var(--grey-300);font-size:14.5px}
+.docs .mono{color:var(--grey-700);margin-right:10px}
+.docs a{margin-right:16px;white-space:nowrap}
+
+/* pipeline diagram */
+.flow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;margin:22px 0;border:1px solid var(--grey-200);border-radius:4px;overflow:hidden;background:#fff}
+.flow .step{padding:16px 14px;border-right:1px solid var(--grey-200);position:relative}
+.flow .step:last-child{border-right:0}
+.flow .step .mono{color:var(--lyzr-navy);display:block;margin-bottom:8px;font-size:11px}
+.flow .step h4{margin:0 0 6px;font-size:16px}
+.flow .step p{font-size:13.5px;line-height:1.45;margin:0;color:var(--grey-700)}
+
+/* layer stack */
+.stack{margin:22px 0;display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:150px 1fr;border:1px solid var(--grey-200);background:#fff;border-radius:4px}
+.layer .k{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em;font-size:11px;padding:16px 14px;border-right:1px solid var(--grey-200);color:var(--grey-700)}
+.layer .v{padding:14px 16px;font-size:15px}
+.layer .v h4{margin:0 0 4px;font-size:17px}
+.layer.navy{background:var(--lyzr-navy);border-color:var(--lyzr-navy);color:var(--lyzr-offwhite)}
+.layer.navy .k{color:#c9d6e6;border-color:rgba(250,250,249,.25)}
+.layer.found{background:var(--grey-100)}
+
+/* scaling diagram */
+.scale{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.scale .box{border:1px solid var(--grey-200);background:#fff;border-radius:4px;padding:18px}
+.scale .box .mono{color:var(--lyzr-navy);display:block;margin-bottom:10px}
+.pods{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0 8px}
+.pod{width:22px;height:22px;border-radius:3px;background:var(--lyzr-navy)}
+.pod.burst{background:transparent;border:1px dashed var(--lyzr-navy)}
+.nodes{display:flex;gap:6px;margin:12px 0 8px}
+.node{flex:1;height:44px;border:1px solid var(--lyzr-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;letter-spacing:.05em;color:var(--lyzr-navy)}
+.node.burst{border-style:dashed;color:var(--grey-600);border-color:var(--grey-400)}
+
+/* checklist */
+.check{list-style:none;padding:0;margin:14px 0;max-width:72ch}
+.check li{display:grid;grid-template-columns:26px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--grey-200);cursor:pointer;user-select:none}
+.check li .box{width:16px;height:16px;border:1px solid var(--grey-600);border-radius:3px;margin-top:4px}
+.check li.on .box{background:var(--lyzr-navy);border-color:var(--lyzr-navy)}
+.check li.on span.t{color:var(--grey-700)}
+
+/* pager */
+.pager{display:flex;justify-content:space-between;gap:16px;margin:48px 0 0}
+.pager a{flex:1;border:1px solid var(--grey-200);border-radius:4px;padding:14px 16px;text-decoration:none;color:var(--lyzr-black);background:#fff}
+.pager a:hover{border-color:var(--lyzr-black)}
+.pager a .mono{display:block;color:var(--grey-700);margin-bottom:4px;font-size:11px}
+.pager a.next{text-align:right}
+.pager span{flex:1}
+
+/* figures */
+figure{margin:24px 0 26px}
+figure .frame{border:1px solid var(--grey-200);border-radius:4px;background:#fff;overflow:hidden;cursor:zoom-in}
+figure img{display:block;width:100%;height:auto}
+figure.narrow{max-width:560px}
+figure.mid{max-width:720px}
+figcaption{margin-top:10px;font-size:13.5px;line-height:1.5;color:var(--grey-700);max-width:72ch}
+figcaption .mono{color:var(--grey-600);margin-right:8px;font-size:11px}
+.figrow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0 26px;align-items:start}
+.figrow figure{margin:0}
+
+/* architecture tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--grey-200);margin:22px 0 0}
+.tabs button{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;font-size:11px;background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;color:var(--grey-700);cursor:pointer;margin-bottom:-1px}
+.tabs button.on{color:var(--lyzr-black);border-bottom-color:var(--lyzr-navy)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+.tabpane figure{margin-top:16px}
+
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(31,32,34,.92);z-index:100;display:none;align-items:center;justify-content:center;padding:40px;cursor:zoom-out}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:100%;background:#fff;border-radius:3px}
+#lb .x{position:fixed;top:14px;right:18px;color:var(--lyzr-offwhite);font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+
+/* mobile */
+#menuBtn{display:none}
+@media (max-width:1000px){
+  aside{transform:translateX(-100%);transition:transform .2s;width:290px}
+  aside.open{transform:none}
+  main{margin-left:0;padding:0 22px 100px}
+  #menuBtn{display:block;position:fixed;top:12px;right:12px;z-index:30;background:var(--lyzr-black);color:var(--lyzr-offwhite);border:0;border-radius:4px;padding:9px 12px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .g3{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .scale{grid-template-columns:1fr}
+  .flow{grid-auto-flow:row}
+  .flow .step{border-right:0;border-bottom:1px solid var(--grey-200)}
+  .figrow{grid-template-columns:1fr}
+  .layer{grid-template-columns:1fr}
+  .layer .k{border-right:0;border-bottom:1px solid var(--grey-200);padding:10px 14px}
+  .hero{padding-top:70px}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="lb"><span class="x">Close · Esc</span><img alt=""></div>
+<button id="menuBtn" type="button">Contents</button>
+
+<aside id="side">
+  <div class="mono brand">Lyzr Agent Studio</div>
+  <p class="doc-title">Platform guide, from first agent to production</p>
+  <nav>
+  <div class="mono group">Understand</div>
+  <ol>
+    <li><a href="#overview"><span class="n">01</span>What Studio is</a></li>
+    <li><a href="#building-blocks"><span class="n">02</span>Core building blocks</a></li>
+    <li><a href="#orchestration"><span class="n">03</span>Orchestration and automation</a></li>
+    <li><a href="#voice"><span class="n">04</span>Voice agents</a></li>
+    <li><a href="#integrations"><span class="n">05</span>Integrations and APIs</a></li>
+  </ol>
+  <div class="mono group">Under the hood</div>
+  <ol>
+    <li><a href="#infrastructure"><span class="n">06</span>Platform architecture</a></li>
+    <li><a href="#tenancy"><span class="n">07</span>Tenancy and data separation</a></li>
+    <li><a href="#security"><span class="n">08</span>Security and responsible AI</a></li>
+    <li><a href="#scaling"><span class="n">09</span>Scaling and availability</a></li>
+    <li><a href="#observability"><span class="n">10</span>Observability and lifecycle</a></li>
+    <li><a href="#governance"><span class="n">11</span>Governance and cost control</a></li>
+  </ol>
+  <div class="mono group">Go live</div>
+  <ol>
+    <li><a href="#private-deployment"><span class="n">12</span>Deploying in your VPC or on-prem</a></li>
+    <li><a href="#get-started"><span class="n">13</span>Getting started checklist</a></li>
+  </ol>
+  </nav>
+  <div class="meta">
+    <div class="mono" style="margin-bottom:6px">Reading time</div>
+    About 40 minutes end to end. Chapters 06 to 12 are written for infrastructure, security and platform teams.
+  </div>
+</aside>
+
+<main>
+<div class="wrap">
+
+<header class="hero" id="top">
+  <div class="eyebrow">Lyzr Agent Studio · Platform guide · November 2026</div>
+  <h1>Everything you need to know about Lyzr Studio</h1>
+  <p class="lead">A sequential walkthrough of the platform, starting with what agents are built from and ending with how Studio is deployed, isolated, secured and scaled in production.</p>
+  <div class="hero-meta">
+    <div><span class="mono">Who it is for</span>Builders, architects, security and platform teams</div>
+    <div><span class="mono">How to read it</span>Top to bottom, or jump by chapter</div>
+    <div><span class="mono">Reference</span><a href="https://docs.lyzr.ai/">docs.lyzr.ai</a></div>
+  </div>
+</header>
+
+<!-- 01 -->
+<section class="ch" id="overview">
+  <div class="mono ch-num">Chapter 01 · Understand</div>
+  <h2>What Lyzr Studio is</h2>
+  <p class="lead">Lyzr is a full-stack agent infrastructure platform. Agent Studio is the visual layer where you build, test, deploy and monitor agents, and every agent you build is also an API.</p>
+  <p>Studio gives business users a no-code builder and gives engineers full programmatic control. Memory, knowledge bases and Responsible AI guardrails switch on per agent, and every published agent automatically exposes an OpenAPI 3.1 REST endpoint (plus gRPC stubs), so it can be dropped into existing services, multi-agent systems or protocols such as MCP and Google A2A.</p>
+
+  <h3>The platform in five layers</h3>
+  <p>The top three layers are where agents are built and run. The bottom two are the foundations every agent depends on.</p>
+  <div class="stack">
+    <div class="layer"><div class="k">Application</div><div class="v"><h4>Architect</h4>Text-to-app. Generates full-stack agentic applications (frontend, multi-agent backend, auth, database) from plain-English descriptions, using agents configured in Studio.</div></div>
+    <div class="layer"><div class="k">Builder</div><div class="v"><h4>Agent Studio</h4>Visual environment for single agents, multi-agent orchestration (Manager Agent and SuperFlow), knowledge bases, voice agents, evaluation, deployment and team governance.</div></div>
+    <div class="layer navy"><div class="k">Runtime</div><div class="v"><h4>Lyzr Agent Framework</h4>The engine behind every agent, whether built in Studio, the ADK or the API. Handles model-agnostic LLM calls, tool execution, memory, Responsible AI enforcement inside the inference loop, and protocol adapters (MCP, OpenAI functions, A2A, REST, gRPC).</div></div>
+    <div class="layer found"><div class="k">Models</div><div class="v"><h4>Model layer</h4>Model-agnostic. Swap providers without changing your integration, or bring your own model.</div></div>
+    <div class="layer found"><div class="k">Infrastructure</div><div class="v"><h4>Secure runtime</h4>Cloud-agnostic. Runs on Lyzr Cloud (SaaS), in your own cloud account, or on-premises, without code changes to your agents.</div></div>
+  </div>
+
+  <h3>What happens on every agent call</h3>
+  <p>Safety is part of the request path, not a separate service you call. Each request moves through the same pipeline:</p>
+  <div class="flow">
+    <div class="step"><span class="mono">01 · Input</span><h4>Input checks</h4><p>PII, prompt injection, toxicity and entitlement checks before the model sees anything.</p></div>
+    <div class="step"><span class="mono">02 · Agent CPU</span><h4>Reason and act</h4><p>LLM inference, RAG retrieval and tool calls, with a feedback loop to refine answers.</p></div>
+    <div class="step"><span class="mono">03 · Verify</span><h4>Hallucination Manager</h4><p>Reflection, groundedness and context relevance checks.</p></div>
+    <div class="step"><span class="mono">04 · Output</span><h4>Output checks</h4><p>Fairness and bias, human-in-the-loop gates where set, PII and toxicity re-checked.</p></div>
+    <div class="step"><span class="mono">05 · Record</span><h4>Persist and return</h4><p>Written to memory, logged to traces, scored by eval if configured, then returned.</p></div>
+  </div>
+
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/intro">About Lyzr</a><a href="https://docs.lyzr.ai/enterprise/get-started/architecture">Architecture overview</a><a href="https://docs.lyzr.ai/enterprise/get-started/product-guide">Choosing the right product</a><a href="https://docs.lyzr.ai/enterprise/get-started/glossary">Glossary</a></div>
+</section>
+
+<!-- 02 -->
+<section class="ch" id="building-blocks">
+  <div class="mono ch-num">Chapter 02 · Understand</div>
+  <h2>Core building blocks</h2>
+  <p class="lead">An agent is a role, a goal and instructions, plus the capabilities you switch on. Everything in Studio, including multi-agent systems, is assembled from these pieces.</p>
+
+  <h3>Agents</h3>
+  <p>The agent is the fundamental unit. Its role, goal and instructions are the source of truth for behaviour, and its core features (memory, knowledge base, Responsible AI and so on) add capability. Agents are tested in the Playground, which supports multiple sessions, file uploads (PDF, DOCX, PPTX, Excel, images) with table and image extraction, and side-by-side model comparison with tokens and timings shown under each answer. You can also describe an agent in plain English to the Conversational Builder.</p>
+  <figure>
+    <div class="frame"><img src="img/agent-builder.jpg" alt="Agent builder with role, goal and instructions on the left and model, knowledge, tools, skills, automation and features on the right"></div>
+    <figcaption><span class="mono">Fig 2.1</span>The agent builder. Role, goal and instructions on the left; model, output format, knowledge, tools, skills, triggers and features on the right.</figcaption>
+  </figure>
+
+  <h3>Models</h3>
+  <p>Studio is model-agnostic, with ready-to-use models from OpenAI, Anthropic, Google, Amazon Bedrock, Groq, Perplexity, xAI, Mistral and Meta. Three capabilities matter most in production:</p>
+  <div class="grid g3">
+    <div class="card"><span class="mono">Resilience</span><h4>Fallback models</h4><p>Up to three backup models in priority order. If the primary fails from an outage, rate limit or regional issue, requests route to the next one automatically.</p></div>
+    <div class="card"><span class="mono">Cost</span><h4>Auto-routing</h4><p>Assign a model to Simple, Medium, Complex and Reasoning tiers. Each request is classified and served by the matching tier, typically cutting per-request cost 30 to 50 percent.</p></div>
+    <div class="card"><span class="mono">Control</span><h4>Bring your own model</h4><p>Add your own credentials (for example your OpenAI or Bedrock account) on enterprise plans. Locally running models are supported in VPC deployments.</p></div>
+  </div>
+  <div class="figrow">
+    <figure>
+      <div class="frame"><img src="img/auto-routing.jpg" alt="Auto-route by complexity dialog with a model assigned to Simple, Medium, Complex and Reasoning tiers"></div>
+      <figcaption><span class="mono">Fig 2.2</span>Auto-routing. One model per complexity tier, with relative cost and speed shown for each.</figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><img src="img/playground-compare.jpg" alt="Playground comparing three model responses side by side with tokens and timings"></div>
+      <figcaption><span class="mono">Fig 2.3</span>Playground comparison. One prompt to several models, with tokens and timings under each answer.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Memory</h3>
+  <p>Memory lets agents stay coherent within and across conversations. <b>Lyzr Cognis</b> is the default production memory layer, with zero configuration, automatic updating of stale facts, and optional cross-session memory for the same user. The earlier Lyzr Memory keeps the last 10 messages verbatim and summarises older ones. You can also bring your own provider: Bedrock AgentCore Memory, Mem0, SuperMemory, Azure AI Foundry, or Vertex AI Memory Bank and Sessions.</p>
+
+  <h3>Knowledge: three ways to ground an agent</h3>
+  <div class="tbl"><table>
+    <tr><th>Type</th><th>Best for</th><th>How it works</th></tr>
+    <tr><td>Knowledge Base</td><td>Documents, text, websites</td><td>No-code RAG. Configurable chunking, Basic, MMR or HyDE retrieval, and Basic, Agentic or One-Shot RAG across multiple KBs. Live sources (SharePoint folder-level, websites) re-sync deltas on a schedule, hourly at minimum.</td></tr>
+    <tr><td>Knowledge Graph</td><td>Relationship-heavy data, multi-hop questions</td><td>Entities and relationships extracted into your Neo4j instance, queried through Cypher.</td></tr>
+    <tr><td>Semantic Model</td><td>Structured databases (Text-to-SQL)</td><td>Adds table and column meaning to a selected subset of your schema so the agent converts natural language into SQL and answers in plain language.</td></tr>
+  </table></div>
+  <figure class="mid">
+    <div class="frame"><img src="img/knowledge-graph.jpg" alt="Knowledge graph visualisation showing entities connected by labelled relationships"></div>
+    <figcaption><span class="mono">Fig 2.4</span>A knowledge graph built automatically from uploaded documents. Entities become nodes and relationships become edges the agent can traverse.</figcaption>
+  </figure>
+  <p class="muted small">Knowledge bases and graphs are also available as a service, so agents built on LangChain, Semantic Kernel or other frameworks can query the same knowledge without duplicating data.</p>
+
+  <h3>Tools, Skills, Global Context and Structured Output</h3>
+  <div class="grid g2">
+    <div class="card"><span class="mono">Act</span><h4>Tools</h4><p>Pre-built integrations, custom tools (API key, OAuth or no auth, with token refresh handled for you), and MCP servers. When an agent is shared, each tool either uses one shared credential or asks every end user to sign in with their own account.</p></div>
+    <div class="card"><span class="mono">Reuse</span><h4>Skills</h4><p>Modular, reusable capabilities (code, tool integrations, multi-step prompts) added from a zip or GitHub repo with a SKILL.md at its root, or picked from Lyzr's library, and shareable with teammates.</p></div>
+    <div class="card"><span class="mono">Consistency</span><h4>Global Context</h4><p>Shared instructions such as brand voice, product facts or policy, written once and attached to many agents. An agent can carry several contexts.</p></div>
+    <div class="card"><span class="mono">Integrate</span><h4>Structured Output</h4><p>Responses returned as JSON against a schema, so downstream systems, dashboards and APIs can parse them predictably.</p></div>
+  </div>
+
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/concepts/agents">Agents</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agents/studio">Studio Builder</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agents/playground">Playground</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/models">Models</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/memory">Memory</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/knowledgebase/studiokb">Knowledge Base</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/knowledgebase/studiokg">Knowledge Graph</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/knowledgebase/studiosem">Semantic Model</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/tools">Tools</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connect/skills">Skills</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agent%20features/global%20context">Global Context</a></div>
+</section>
+
+<!-- 03 -->
+<section class="ch" id="orchestration">
+  <div class="mono ch-num">Chapter 03 · Understand</div>
+  <h2>Orchestration and automation</h2>
+  <p class="lead">Two ways to make agents work together, a choice of triggers to run them without a human, and Git to manage them like software.</p>
+
+  <div class="grid g2">
+    <div class="card"><span class="mono">Non-deterministic</span><h4>Manager Agent</h4><p>A manager agent decides which worker agents to call and in what order, based on each request. Best when the path depends on the question. Add workers by typing @ in the instructions.</p></div>
+    <div class="card"><span class="mono">Deterministic and durable</span><h4>SuperFlow</h4><p>A visual workflow builder with 30+ node types (AI Agent, LLM, HTTP Request, Code, If, Loop, Wait for Approval, Parse, Extraction and more). Can also be built by describing the flow in chat.</p></div>
+  </div>
+  <figure>
+    <div class="frame"><img src="img/manager-agent.jpg" alt="Lyzr Manager canvas showing a manager agent delegating to several worker agents"></div>
+    <figcaption><span class="mono">Fig 3.1</span>Manager Agent. A manager delegates to worker agents, drawn from the agent library on the left.</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="img/superflow.jpg" alt="SuperFlow canvas with the node library on the left, a workflow in the centre and the Build with AI chat on the right"></div>
+    <figcaption><span class="mono">Fig 3.2</span>SuperFlow. Node library on the left, the workflow on the canvas, and Build with AI on the right, where the flow was generated from a one-paragraph description.</figcaption>
+  </figure>
+
+  <h3>Why SuperFlow is production infrastructure</h3>
+  <ul class="clean">
+    <li><b>Durable execution.</b> Every step is journaled. If the service restarts mid-run, execution resumes from the point of failure.</li>
+    <li><b>Exactly-once side effects.</b> A step that succeeded never runs again, so retries do not double-charge, double-email or re-fire API calls.</li>
+    <li><b>Per-node retries</b> with exponential backoff, and opt-in <b>error edges</b> that route permanent failures to a fallback or a human.</li>
+    <li><b>Human-in-the-loop.</b> Wait for Approval pauses a run durably, with typed approval forms validated server-side, so irreversible actions can be gated.</li>
+    <li><b>Enterprise HTTP auth</b> built in: Bearer, Basic, API key, OAuth2 client credentials, AWS SigV4, JWT and mTLS.</li>
+    <li><b>Crash-safe schedules.</b> Cron ticks are not missed and queued runs survive restarts. Flows are versioned.</li>
+  </ul>
+
+  <h3>Triggers</h3>
+  <p>Agents and workflows can run on a <b>schedule</b> (minutes, hours, days, months or cron, with up to 10 retries and a configurable delay) or from a <b>webhook</b> (a dedicated endpoint secured by a regenerable secret key). Every run appears in an Executions dashboard with status and error reason.</p>
+  <figure class="narrow">
+    <div class="frame"><img src="img/scheduler.jpg" alt="Scheduler configuration with interval, minute, max retries and retry delay"></div>
+    <figcaption><span class="mono">Fig 3.3</span>Scheduler configuration, with retry count and retry delay for unattended runs.</figcaption>
+  </figure>
+
+  <h3>Git for Agents</h3>
+  <p>Connect any agent to GitHub or GitHub Enterprise and its configuration lives in a repository. Use branches for dev, staging and production (each with its own API key), promote through pull requests, enforce branch protection, and restore any commit in one click. Edits sync both ways between Studio and Git, giving you an audit trail for regulated change control.</p>
+  <figure class="narrow">
+    <div class="frame"><img src="img/git-promote.jpg" alt="Promote Branch dialog from non-prod to main with pull request or direct merge options"></div>
+    <figcaption><span class="mono">Fig 3.4</span>Promoting a change from non-prod to main, through a reviewable pull request or a direct merge.</figcaption>
+  </figure>
+
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/concepts/multi-agent-orchestration">Multi-agent orchestration</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/manageragent/studio">Manager Agent</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/automation/scheduler">Scheduler</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/automation/webhook-trigger">Webhook Trigger</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/control-plane/version-control">Version Control</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/orchestration/blueprints">Blueprints</a></div>
+</section>
+
+<!-- 04 -->
+<section class="ch" id="voice">
+  <div class="mono ch-num">Chapter 04 · Understand</div>
+  <h2>Voice agents</h2>
+  <p class="lead">Low-latency conversational agents you can put on a phone number, with the same knowledge and guardrail features as text agents.</p>
+  <div class="tbl"><table>
+    <tr><th>Engine</th><th>How it works</th><th>Choose it when</th></tr>
+    <tr><td>Realtime</td><td>One audio-to-audio model, sub-500ms latency, natural interruption handling</td><td>Users interrupt often and latency matters most</td></tr>
+    <tr><td>Pipeline</td><td>Separate STT, LLM and TTS providers you choose</td><td>You need control over each stage, cost or voice</td></tr>
+  </table></div>
+  <figure class="mid">
+    <div class="frame"><img src="img/voice-engine.jpg" alt="Voice agent engine mode selector with Pipeline chosen and STT, LLM and TTS components configured"></div>
+    <figcaption><span class="mono">Fig 4.1</span>Choosing the engine. Here the Pipeline engine combines a streaming STT, a lightweight LLM and a TTS voice.</figcaption>
+  </figure>
+  <p>Voice agents connect to Telnyx, Twilio or Plivo using your own accounts, support knowledge base retrieval, dynamic variables, pronunciation rules, Krisp noise cancellation and call recording. Every call produces a transcript with interruption tracking, handoffs and a technical event log.</p>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/agent-studio/voice/overview">Voice agents</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/voice/building-voice-agents">Building voice agents</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/voice/telephony">Telephony and analytics</a></div>
+</section>
+
+<!-- 05 -->
+<section class="ch" id="integrations">
+  <div class="mono ch-num">Chapter 05 · Understand</div>
+  <h2>Integrations and APIs</h2>
+  <p class="lead">Studio connects to your data and tools, and every agent can be called from your own applications.</p>
+
+  <h3>Data and vector stores</h3>
+  <div class="grid g2">
+    <div class="card"><span class="mono">Data connectors</span><h4>SQL and NoSQL</h4><p>Amazon Redshift, PostgreSQL, MySQL, Google BigQuery, MongoDB, Azure SQL, Microsoft SQL Server, Databricks, Snowflake, plus CSV, Excel and JSON upload.</p></div>
+    <div class="card"><span class="mono">Vector stores</span><h4>Choose your backend</h4><p>Weaviate, Qdrant, Milvus, PGVector, SingleStore, Neo4j and Amazon Neptune. Lyzr provides managed defaults for Qdrant and Weaviate; others use your credentials.</p></div>
+  </div>
+
+  <h3>Interoperability</h3>
+  <ul class="clean">
+    <li><b>MCP.</b> Connect any MCP server by URL (API key or OAuth) and choose which actions each agent may use.</li>
+    <li><b>A2A.</b> Call agents built on other platforms (LangChain, CrewAI and others) from Lyzr agents and workflows by their A2A server URL.</li>
+  </ul>
+
+  <h3>Calling agents from your applications</h3>
+  <p>Every agent is instantly deployable. Publish it in Studio with Private, Organization or Public visibility, and call it through its REST endpoint or the Python ADK.</p>
+<pre><code>POST https://agent-prod.studio.lyzr.ai/v3/inference/chat/
+x-api-key: &lt;YOUR_API_KEY&gt;      # always server-side, never in frontend code
+Content-Type: application/json
+
+{
+  "agent_id":   "&lt;AGENT_ID&gt;",
+  "user_id":    "user@company.com",
+  "session_id": "conv_abc123",
+  "message":    "..."
+}</code></pre>
+  <p>The Deploy tab of every agent shows this request ready to copy, alongside the agent's A2A endpoint and its Agent JSON. How you set <code>session_id</code> and <code>user_id</code> decides what the agent remembers:</p>
+  <div class="tbl"><table>
+    <tr><th>Pattern</th><th>session_id</th><th>user_id</th></tr>
+    <tr><td>Single conversation (support chat)</td><td>New per conversation, reused each turn</td><td>The end user's ID</td></tr>
+    <tr><td>Returning user with memory (SaaS app)</td><td>New per conversation</td><td>Stable per user, enables cross-session memory</td></tr>
+    <tr><td>Stateless lookup (FAQ)</td><td>New per request</td><td>A generic ID</td></tr>
+    <tr><td>Shared team thread</td><td>Shared across users</td><td>Different per user</td></tr>
+  </table></div>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/quickstart">Quickstart</a><a href="https://docs.lyzr.ai/enterprise/api/agents/introduction">API reference</a><a href="https://docs.lyzr.ai/enterprise/api/agents/chat">Chat endpoint</a><a href="https://docs.lyzr.ai/enterprise/api/agents/stream-chat">Streaming</a><a href="https://docs.lyzr.ai/enterprise/api/sessions/list">Sessions</a><a href="https://docs.lyzr.ai/enterprise/adk/overview">ADK</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/data-connectors">Data connectors</a><a href="https://docs.lyzr.ai/enterprise/integrations/overview">Integrations</a></div>
+</section>
+
+<!-- 06 -->
+<section class="ch" id="infrastructure">
+  <div class="mono ch-num">Chapter 06 · Under the hood</div>
+  <h2>Platform architecture</h2>
+  <p class="lead">Studio is a set of containerised microservices on Kubernetes. The service topology is the same everywhere it runs; only the substrate underneath changes.</p>
+
+  <h3>Deployment models</h3>
+  <div class="grid g3">
+    <div class="card"><span class="mono">Lyzr Cloud</span><h4>Managed SaaS</h4><p>Shared multi-tenant platform on AWS EKS with logical tenant isolation. Fastest to start; nothing to operate.</p></div>
+    <div class="card"><span class="mono">Your cloud</span><h4>Private VPC</h4><p>The full platform deployed into your AWS, Azure or GCP account, behind your network controls, identity and keys.</p></div>
+    <div class="card"><span class="mono">Your datacenter</span><h4>On-premises</h4><p>Bare-metal Kubernetes with self-hosted equivalents for every managed cloud service.</p></div>
+  </div>
+
+  <h3>Service topology</h3>
+  <p>The sizing baseline is 16 services in two tiers. The current service catalogue is broader (20+ services, including Skills, the Simulation Engine, Agent Builder and background workers), so confirm the exact list for your version with Lyzr.</p>
+  <div class="tbl"><table>
+    <tr><th>Tier</th><th>Service</th><th>Role</th></tr>
+    <tr><td><span class="mono">High</span></td><td>Agent API / WebSocket</td><td>Real-time agent execution and chat. The primary client-facing service.</td></tr>
+    <tr><td><span class="mono">High</span></td><td>RAG</td><td>Retrieval-augmented generation; heaviest traffic to the vector store.</td></tr>
+    <tr><td><span class="mono">High</span></td><td>Orchestration</td><td>Multi-step workflow coordination across agents and tools.</td></tr>
+    <tr><td><span class="mono">High</span></td><td>Crawler and Parse</td><td>Web crawling and document parsing. Bursty, queue-driven workloads.</td></tr>
+    <tr><td><span class="mono">Standard</span></td><td>MCP, Scheduler, Data Query, ACI</td><td>Tool protocol handling, cron and jobs, the query engine, and the agent compute interface.</td></tr>
+    <tr><td><span class="mono">Standard</span></td><td>Memory, Frontend, SRS</td><td>State store, the Studio web app, and speech recognition.</td></tr>
+    <tr><td><span class="mono">Standard</span></td><td>Metrics, OTel</td><td>Application telemetry and the OpenTelemetry trace and metric collector.</td></tr>
+    <tr><td><span class="mono">Standard</span></td><td>Marketplace, Billing, URL shortener</td><td>Agent catalogue, payments and utility services.</td></tr>
+  </table></div>
+
+  <h3>Reference architectures</h3>
+  <p>Every cloud follows the same three-zone pattern: a public edge (WAF and load balancer), a private application subnet running the Lyzr services, and a private data subnet reachable only from the application tier. Pick a cloud to see its diagram; click any diagram to enlarge it.</p>
+  <div class="tabs" role="tablist">
+    <button class="on" data-tab="aws" type="button">AWS</button>
+    <button data-tab="azure" type="button">Azure</button>
+    <button data-tab="gcp" type="button">Google Cloud</button>
+    <button data-tab="baremetal" type="button">On-prem</button>
+  </div>
+  <div class="tabpane on" data-pane="aws">
+    <figure>
+      <div class="frame"><img src="img/arch-aws.jpg" alt="AWS reference architecture: WAF and ALB in public subnets, EKS cluster with Lyzr services in private app subnets, ElastiCache, Postgres RDS, OpenSearch and DocumentDB in private DB subnets, Bedrock for models"></div>
+      <figcaption><span class="mono">Fig 6.1 · AWS</span>Traffic enters through WAF and an ALB, reaches the EKS cluster running all services plus Keycloak in private app subnets across availability zones, and the data tier sits in private DB subnets. Bedrock is called from the app tier; egress leaves through a NAT Gateway. VPC endpoints are recommended for ECR, STS, Secrets Manager, SQS, S3, Bedrock and KMS.</figcaption>
+    </figure>
+  </div>
+  <div class="tabpane" data-pane="azure">
+    <figure>
+      <div class="frame"><img src="img/arch-azure.jpg" alt="Azure reference architecture: Front Door and Application Gateway, Lyzr services as Container Apps, Cosmos DB, Postgres, Redis and VMs for ClickHouse, Keycloak and Qdrant, Azure AI Foundry for models"></div>
+      <figcaption><span class="mono">Fig 6.2 · Azure</span>Front Door provides global routing and WAF; Application Gateway terminates TLS with mTLS to the backend. Services run as Container Apps, with high-tier services on a dedicated workload profile. Managed data services are reachable only through Private Endpoints; Managed Identity handles service auth and Key Vault holds all secrets.</figcaption>
+    </figure>
+  </div>
+  <div class="tabpane" data-pane="gcp">
+    <figure>
+      <div class="frame"><img src="img/arch-gcp.jpg" alt="GCP reference architecture: Cloud Armor and Cloud Load Balancing, Lyzr services on private GKE, Firestore, Cloud SQL, AlloyDB, Memorystore, BigQuery and VMs for Qdrant, Keycloak and ClickHouse, Vertex AI for models"></div>
+      <figcaption><span class="mono">Fig 6.3 · Google Cloud</span>Cloud Armor and Cloud Load Balancing front a private, regional GKE Autopilot cluster with Workload Identity and default-deny network policy. Cloud CDN caches the Studio frontend. Secret Manager and Cloud KMS hold secrets and customer-managed keys.</figcaption>
+    </figure>
+  </div>
+  <div class="tabpane" data-pane="baremetal">
+    <figure>
+      <div class="frame"><img src="img/arch-baremetal.jpg" alt="Bare-metal Kubernetes reference architecture with ingress tier, control plane pool, app worker pool, data worker pool and ops worker pool"></div>
+      <figcaption><span class="mono">Fig 6.4 · On-prem</span>A 12-node cluster split into four tainted pools (control plane, app, data and ops), so one tier cannot consume another's resources. Every managed cloud service is replaced with a self-hosted equivalent, such as CloudNativePG, Vault, MinIO and Harbor.</figcaption>
+    </figure>
+  </div>
+  <p class="muted small">Diagrams from Lyzr's Solutions Architecture reference designs. The diagrams show the full current service catalogue, which is wider than the 16-service sizing baseline above.</p>
+
+  <h3>The same platform on every substrate</h3>
+  <div class="tbl"><table>
+    <tr><th>Layer</th><th>AWS</th><th>Azure</th><th>GCP</th><th>On-prem</th></tr>
+    <tr><td>Compute</td><td>EKS</td><td>Container Apps</td><td>GKE Autopilot</td><td>kubeadm or RKE2, 4 tainted node pools</td></tr>
+    <tr><td>Workload identity</td><td>EKS Pod Identity</td><td>Managed Identity</td><td>Workload Identity Federation</td><td>Vault Kubernetes auth</td></tr>
+    <tr><td>Edge</td><td>WAF, ALB</td><td>Front Door, App Gateway</td><td>Cloud Armor, Cloud LB</td><td>MetalLB, NGINX, ModSecurity</td></tr>
+    <tr><td>Data</td><td>RDS Postgres, DocumentDB, ElastiCache</td><td>Postgres Flexible, Cosmos DB, Redis</td><td>Cloud SQL, AlloyDB, Firestore, Memorystore</td><td>CloudNativePG, MongoDB, Redis Sentinel</td></tr>
+    <tr><td>Vector, analytics</td><td>Qdrant, ClickHouse</td><td>Qdrant, ClickHouse</td><td>Qdrant</td><td>Qdrant, ClickHouse</td></tr>
+    <tr><td>Secrets and keys</td><td>Secrets Manager, KMS</td><td>Key Vault</td><td>Secret Manager, Cloud KMS</td><td>HashiCorp Vault</td></tr>
+    <tr><td>Queues, storage</td><td>SQS, S3</td><td>Service Bus, Storage</td><td>Pub/Sub, Cloud Storage</td><td>NATS or RabbitMQ, MinIO</td></tr>
+    <tr><td>Observability</td><td>CloudWatch</td><td>Azure Monitor, App Insights</td><td>Cloud Monitoring</td><td>Prometheus, Grafana, Loki</td></tr>
+    <tr><td>Delivery</td><td>Helm</td><td>Bicep</td><td>Terraform</td><td>ArgoCD, Helm, Kustomize</td></tr>
+  </table></div>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/architecture">Architecture overview</a></div>
+</section>
+
+<!-- 07 -->
+<section class="ch" id="tenancy">
+  <div class="mono ch-num">Chapter 07 · Under the hood</div>
+  <h2>Tenancy and data separation</h2>
+  <p class="lead">On Lyzr Cloud, Studio runs on shared multi-tenant infrastructure with logical tenant isolation. Dedicated per-tenant infrastructure or databases are not created by default.</p>
+
+  <h3>The isolation boundary is the organisation ID</h3>
+  <p>Every organisation and every sub-account gets a unique <code>org_id</code>, and every resource, user assignment and permission is mapped to it. A resource belongs to exactly one <code>org_id</code>, and a user's access is evaluated against the org they are operating in. Two sub-accounts under one parent are as separated from each other as two different companies.</p>
+
+  <h3>Where each kind of data lives</h3>
+  <div class="tbl"><table>
+    <tr><th>Data</th><th>Where it is stored</th><th>How it is separated</th></tr>
+    <tr><td>LLM credentials, MCP and enterprise connections</td><td>The shared platform's secret and configuration stores</td><td>Logically scoped to your organisation. Each org can use its own credentials, including customer-provided OpenAI or Amazon Bedrock keys. Not a separate database or Secrets Manager instance per tenant.</td></tr>
+    <tr><td>Agents, workflows and sessions</td><td>The shared Studio platform</td><td>Configuration and runtime or session data are logically associated with your tenant, not deployed on tenant-dedicated infrastructure.</td></tr>
+    <tr><td>Knowledge bases and context data</td><td>Shared PostgreSQL and Qdrant data stores</td><td>Logical tenant separation by organisation.</td></tr>
+    <tr><td>Tool credentials (OAuth tokens, API keys)</td><td>Lyzr's secure credential store</td><td>Scoped to your organisation; can use your own OAuth applications.</td></tr>
+  </table></div>
+
+  <h3>When you need a stronger data boundary</h3>
+  <ul class="clean">
+    <li><b>Bring your own data store.</b> Connect your own vector database or PostgreSQL (or another supported vector-capable store) for knowledge base data, so that data stays in infrastructure you control.</li>
+    <li><b>Bring your own model credentials.</b> Inference runs against your provider account, for example Bedrock in your own region.</li>
+    <li><b>Use your own OAuth apps</b> for tools, so authentication and data access stay under your governance.</li>
+    <li><b>Deploy privately.</b> A VPC or on-prem deployment gives you dedicated infrastructure, databases and secret stores (chapter 12).</li>
+    <li><b>Separate teams with sub-accounts</b> inside your organisation (chapter 11).</li>
+  </ul>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/agent-studio/governance/team-management">Team management</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/data-connectors">Data connectors</a></div>
+</section>
+
+<!-- 08 -->
+<section class="ch" id="security">
+  <div class="mono ch-num">Chapter 08 · Under the hood</div>
+  <h2>Security and responsible AI</h2>
+  <p class="lead">Guardrails run inside the inference loop on every turn. Policies are written once and attached to many agents, and changes apply from the next message.</p>
+
+  <h3>Guardrail families</h3>
+  <div class="tbl"><table>
+    <tr><th>Family</th><th>Modules</th></tr>
+    <tr><td>Lyzr native</td><td>Toxicity detection, prompt injection protection, secrets detection (API keys, tokens, JWTs, private keys), allowed and banned topics, blocked keywords, NSFW, gibberish, valid OpenAPI spec, valid SQL</td></tr>
+    <tr><td>PII controls</td><td>Disable, block or redact nine categories: card numbers, emails, phone numbers, names, locations, IP addresses, SSNs, URLs, dates and times</td></tr>
+    <tr><td>Compliance</td><td>Checks input and output against 14 built-in frameworks and your own rules</td></tr>
+    <tr><td>Amazon Bedrock</td><td>Sexual content, violence, hate speech, insults, misconduct, prompt attacks (uses your Bedrock credentials)</td></tr>
+    <tr><td>Hallucination Manager</td><td>Reflection, groundedness, LLM as a judge (beta)</td></tr>
+  </table></div>
+  <p>Prompt injection is scored before the question reaches the LLM (default threshold 0.3) and blocked above threshold. Toxicity is scored on the response (default 0.4); a toxic draft is sent back to the model for a safe alternative.</p>
+  <figure class="mid">
+    <div class="frame"><img src="img/prompt-injection.jpg" alt="Playground showing a prompt injection attempt detected with 100 percent confidence above a 30 percent threshold"></div>
+    <figcaption><span class="mono">Fig 8.1</span>A prompt injection attempt caught in the Playground before it reaches the model, with the confidence score and threshold shown.</figcaption>
+  </figure>
+
+  <h3>Compliance guardrails</h3>
+  <p>Switch on Compliance in a policy, pick frameworks, and add plain-English custom rules with a severity. Both checks run at temperature 0 for consistent verdicts, and an audit record with trace spans is written for every check, whether or not anything fails.</p>
+  <div class="tbl"><table>
+    <tr><th>Region</th><th>Frameworks</th></tr>
+    <tr><td>International</td><td>ISO 27001, SOC 2, PCI DSS</td></tr>
+    <tr><td>European Union</td><td>GDPR, EU AI Act</td></tr>
+    <tr><td>United States</td><td>HIPAA, CCPA (with CPRA), FedRAMP</td></tr>
+    <tr><td>Singapore</td><td>MAS, PDPA</td></tr>
+    <tr><td>Australia</td><td>ISM, PSPF, Privacy Act, IRAP</td></tr>
+  </table></div>
+  <ul class="clean">
+    <li><b>Block mode</b> (default): HIGH or CRITICAL failures withhold the reply; LOW and MEDIUM failures are flagged.</li>
+    <li><b>Flag mode:</b> the reply is delivered and reviewers see the concerns with evidence quotes.</li>
+    <li>A blocked input never reaches the model; it sees only the block notice.</li>
+  </ul>
+  <div class="figrow">
+    <figure>
+      <div class="frame"><img src="img/compliance-frameworks.jpg" alt="Compliance section of a Responsible AI policy with frameworks such as ISO 27001 and CCPA selected"></div>
+      <figcaption><span class="mono">Fig 8.2</span>Turning on Compliance in a policy and ticking frameworks. Each comes with a readable rule set maintained by Lyzr.</figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><img src="img/compliance-blocked.jpg" alt="An agent reply withheld for critical IRAP compliance failures, listing each failed rule with severity and evidence"></div>
+      <figcaption><span class="mono">Fig 8.3</span>Block mode in action. A reply that fails CRITICAL IRAP rules is withheld, and Studio lists each failed rule with its evidence.</figcaption>
+    </figure>
+  </div>
+  <div class="note"><span class="mono">Note</span><p>Compliance guardrails check what agents say against the rules behind each framework. They help you operate in line with those standards; they are not a certification of the platform. Ask Lyzr for its current certifications and security documentation as part of your review.</p></div>
+
+  <h3>Access, credentials and API security</h3>
+  <ul class="clean">
+    <li><b>Role-based access</b> with Owner, Admin and Member roles. Only Owners and Admins manage models and data connectors.</li>
+    <li><b>Audit log</b> of every platform action, filterable by date, user, action (read, delete, access denied, export), resource type and result.</li>
+    <li><b>Tool credentials</b> are held in Lyzr's secure store on SaaS, or in your own infrastructure for private deployments. Custom OAuth apps keep authentication under your governance.</li>
+    <li><b>API keys</b> must be sent server-side only, never from frontend code. Webhook endpoints are protected by regenerable secret keys.</li>
+    <li><b>Memory scope.</b> Per-conversation memory is the default and the more privacy-friendly option; enable cross-session memory deliberately.</li>
+  </ul>
+
+  <h3>In a private deployment</h3>
+  <p>Secrets live in your cloud's secret manager or HashiCorp Vault and are mounted through the Secrets Store CSI driver with rotation enabled on AWS. Services authenticate to cloud resources with workload identity (Pod Identity, Managed Identity, Workload Identity Federation) instead of long-lived keys. Data stores are reachable only on private endpoints, ingress is TLS-terminated behind a WAF, and customer-managed encryption keys are supported on AWS, Azure and GCP. On GKE and bare-metal, namespaces run with default-deny network policy and restricted Pod Security Standards.</p>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/agent-studio/responsible-safe-ai/Responsible">Responsible AI</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/connections/guardrails">Guardrails</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/governance/roles-permissions">Roles and permissions</a><a href="https://docs.lyzr.ai/enterprise/lyzr-blocks/responsible-ai/api/create-policy">RAI policy API</a></div>
+</section>
+
+<!-- 09 -->
+<section class="ch" id="scaling">
+  <div class="mono ch-num">Chapter 09 · Under the hood</div>
+  <h2>Scaling and availability</h2>
+  <p class="lead">Studio scales in two layers on EKS. KEDA adds and removes pods per service based on load, and the Cluster Autoscaler adds nodes when new pods cannot be scheduled.</p>
+
+  <div class="scale">
+    <div class="box">
+      <span class="mono">Layer 1 · Pod autoscaling · KEDA</span>
+      <div class="pods"><div class="pod"></div><div class="pod"></div><div class="pod"></div><div class="pod burst"></div><div class="pod burst"></div><div class="pod burst"></div><div class="pod burst"></div><div class="pod burst"></div><div class="pod burst"></div><div class="pod burst"></div></div>
+      <p class="small muted">Each HTTP service in production runs 3 to 10 pods (the UI up to 50) and scales out at 70 percent CPU or memory.</p>
+    </div>
+    <div class="box">
+      <span class="mono">Layer 2 · Node autoscaling · Cluster Autoscaler</span>
+      <div class="nodes"><div class="node">APP</div><div class="node">APP</div><div class="node burst">+ NODE</div><div class="node burst">+ NODE</div></div>
+      <p class="small muted">The app node group runs 2 to 20 m5.large nodes, beside a system group of 2. Pending pods trigger new nodes.</p>
+    </div>
+  </div>
+
+  <h3>Pod autoscaling</h3>
+  <p>Every enabled HTTP service gets a KEDA ScaledObject, and KEDA creates and manages the HPA behind it (a plain HPA is used only when a service opts out; the two are never combined on one Deployment). When several triggers are active, the one asking for the most pods wins.</p>
+  <div class="tbl"><table>
+    <tr><th>Trigger</th><th>When active</th><th>Default</th></tr>
+    <tr><td>CPU utilisation</td><td>Always</td><td>70 percent, customisable</td></tr>
+    <tr><td>Memory utilisation</td><td>When a memory threshold is set</td><td>70 percent, customisable</td></tr>
+    <tr><td>HTTP requests per second</td><td>When Prometheus scaling is enabled (via SigNoz)</td><td>Customisable</td></tr>
+  </table></div>
+  <p>KEDA's cooldown is 60 seconds for services. ArgoCD ignores replica counts on Deployments, so a GitOps sync never resets what the autoscaler has set.</p>
+
+  <h3>Node autoscaling</h3>
+  <p>Node capacity comes from the EKS Cluster Autoscaler on managed node groups. When a new pod does not fit on any node it waits as Pending until a node is added. Pods can run on any node unless a node selector is configured.</p>
+
+  <h3>Availability guards</h3>
+  <div class="grid g2">
+    <div class="card"><span class="mono">Rollouts</span><h4>Rolling updates</h4><p>maxSurge 0 and maxUnavailable 1: a pod is removed before its replacement starts, so a rollout needs no extra node capacity.</p></div>
+    <div class="card"><span class="mono">Disruption</span><h4>PodDisruptionBudgets</h4><p>At most one pod per HTTP service is evicted at a time during node drains and scale-downs.</p></div>
+    <div class="card"><span class="mono">Resources</span><h4>Guaranteed QoS</h4><p>Requests equal limits for most services, so CPU and memory are measured against the full limit and pods are not starved by neighbours.</p></div>
+    <div class="card"><span class="mono">Traffic</span><h4>Probes and graceful shutdown</h4><p>Liveness and readiness probes on every HTTP service; pods get traffic only when ready. Termination grace of 30s for services and 60s for workers lets in-flight work finish.</p></div>
+  </div>
+
+  <h3>Resilience above the infrastructure</h3>
+  <ul class="clean">
+    <li><b>Model fallback</b> across up to three providers keeps agents answering through a provider outage or rate limit.</li>
+    <li><b>Durable SuperFlow execution</b> resumes after restarts without re-running completed steps.</li>
+    <li><b>Queue-driven workers</b> for parsing, crawling and knowledge base sync absorb bursts without slowing the chat path.</li>
+    <li><b>Rate limits</b> protect shared capacity from spikes and abuse (chapter 11).</li>
+  </ul>
+  <div class="note"><span class="mono">For private deployments</span><p>Qdrant, ClickHouse and Keycloak have no first-party managed equivalent on any cloud, so they run as VMs or StatefulSets. For production, size them as clusters rather than single nodes from day one. On Azure and GCP, managed services bill per vCPU-second, so cost grows with traffic.</p></div>
+</section>
+
+<!-- 10 -->
+<section class="ch" id="observability">
+  <div class="mono ch-num">Chapter 10 · Under the hood</div>
+  <h2>Observability and lifecycle</h2>
+  <p class="lead">Test before production, watch after, and keep every change reversible.</p>
+
+  <div class="grid g2">
+    <div class="card"><span class="mono">Before production</span><h4>Simulation Engine</h4><p>Generates scenarios, personas and test cases (single or multi-turn), scores agents on task completion, hallucination, bias, toxicity, faithfulness and more, and recommends fixes through Agent Hardening.</p></div>
+    <div class="card"><span class="mono">After production</span><h4>Agent Improvement Engine</h4><p>Evaluates live traffic on a schedule, detects drift, hallucinations and tool failures, logs each with root cause, emails alerts and can harden prompts automatically.</p></div>
+    <div class="card"><span class="mono">Every run</span><h4>Traces and analytics</h4><p>Each interaction records the query, reasoning, tool calls, responses, latency, tokens and model. Analytics shows traces, credits and latency trends; voice calls get full transcripts.</p></div>
+    <div class="card"><span class="mono">Every change</span><h4>Versioning and Git</h4><p>Every save creates a restorable version, available through the API. Git for Agents adds branches, pull requests and promotion between environments.</p></div>
+  </div>
+  <figure>
+    <div class="frame"><img src="img/trace-timeline.jpg" alt="Trace view showing input, output, duration, tokens, credits and a timeline of each operation"></div>
+    <figcaption><span class="mono">Fig 10.1</span>A single trace. Input, output, duration, tokens and credits at the top, and a timeline of every operation (memory lookups, model call) below.</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="img/monitoring.jpg" alt="Monitoring dashboard with credits consumed, average latency, error rate and token usage over time"></div>
+    <figcaption><span class="mono">Fig 10.2</span>The monitoring dashboard: credits, latency, error rate and token usage over time.</figcaption>
+  </figure>
+  <div class="figrow">
+    <figure>
+      <div class="frame"><img src="img/simulation-engine.jpg" alt="Simulation Engine environment with generated scenarios and personas for an agent"></div>
+      <figcaption><span class="mono">Fig 10.3</span>Simulation Engine. Scenarios and personas generated from the agent's configuration, ready to turn into test cases.</figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><img src="img/version-history.jpg" alt="Version history panel listing saved versions of an agent with restore buttons"></div>
+      <figcaption><span class="mono">Fig 10.4</span>Version history. Every save is a version that can be restored in one click.</figcaption>
+    </figure>
+  </div>
+  <p>Owners and Admins can download organisation-wide reports in Excel by agent (runs, credits, tokens, latency, error rate) or by user. In private deployments, logs, metrics and traces flow into your own stack through OpenTelemetry and the native monitoring service for your cloud, or Prometheus, Grafana and Loki on-prem.</p>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/get-started/concepts/evaluating-agents">Evaluating agents</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agent%20eval/agentsimulation">Simulation Engine</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agent%20eval/improvement-engine">Improvement Engine</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/agent%20eval/tracing">Tracing</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/monitoring/reports">Reports</a><a href="https://docs.lyzr.ai/enterprise/api/agents/versions/list">Versions API</a></div>
+</section>
+
+<!-- 11 -->
+<section class="ch" id="governance">
+  <div class="mono ch-num">Chapter 11 · Under the hood</div>
+  <h2>Governance and cost control</h2>
+  <p class="lead">Organise teams into isolated workspaces, give people the right roles in each, and cap spend at every level.</p>
+
+  <h3>Roles</h3>
+  <div class="tbl"><table>
+    <tr><th>Capability</th><th>Owner (one)</th><th>Admin</th><th>Member</th></tr>
+    <tr><td>Manage users and sub-organisations</td><td>Yes</td><td>No</td><td>No</td></tr>
+    <tr><td>Billing and top-ups</td><td>Yes</td><td>No</td><td>No</td></tr>
+    <tr><td>Add models and data connectors</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Build agents, knowledge bases, RAI policies</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Share agents</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Audit log and org-wide reports</td><td>Yes</td><td>Yes</td><td>Own usage only</td></tr>
+  </table></div>
+
+  <h3>Sub-accounts</h3>
+  <p>Sub-accounts split one organisation into separate workspaces, typically one per team, department, client or project. Each has its own <code>org_id</code>, and its agents, knowledge bases, tools, skills, users, roles and usage stay inside it. A person can be an Admin in one sub-account and a Member in another, and a role in one confers no access in any other. Sub-accounts are enabled on request.</p>
+
+  <h3>Rate limits</h3>
+  <p>Set token or credit limits over any window (hourly, daily, weekly, monthly or custom) at four levels. Limits cascade, so a user cannot exceed their team's limit even if the organisation has quota left. When a limit is hit, requests fail cleanly with a quota-exceeded response.</p>
+  <div class="flow">
+    <div class="step"><span class="mono">Level 1</span><h4>Organisation</h4><p>Overall ceiling</p></div>
+    <div class="step"><span class="mono">Level 2</span><h4>Team or sub-org</h4><p>Allocation per team</p></div>
+    <div class="step"><span class="mono">Level 3</span><h4>User</h4><p>Fair use per person</p></div>
+    <div class="step"><span class="mono">Level 4</span><h4>Agent</h4><p>Protect heavy agents</p></div>
+  </div>
+
+  <h3>How usage is metered</h3>
+  <p>Usage is metered in credits, where one credit equals one dollar. Model usage is token count (prompt plus response, including instructions and retrieved context) multiplied by a per-model rate. Tool calls cost a fixed amount per invocation, memory is free, and guardrails and groundedness checks add cost based on the modules used. Auto-routing and lighter models are the main levers for keeping cost down.</p>
+  <div class="docs"><span class="mono">Docs</span><a href="https://docs.lyzr.ai/enterprise/agent-studio/governance/roles-permissions">Roles and permissions</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/governance/team-management">Team management</a><a href="https://docs.lyzr.ai/enterprise/agent-studio/governance/rate-limits">Rate limits</a><a href="https://docs.lyzr.ai/enterprise/get-started/credits">Understanding credits</a><a href="https://docs.lyzr.ai/enterprise/get-started/pricing">Usage pricing</a></div>
+</section>
+
+<!-- 12 -->
+<section class="ch" id="private-deployment">
+  <div class="mono ch-num">Chapter 12 · Go live</div>
+  <h2>Deploying in your VPC or on-prem</h2>
+  <p class="lead">Installing the software is rarely the long pole. Network, identity and security approvals are, so they should start on day one, in parallel with provisioning.</p>
+
+  <h3>What your teams will evaluate</h3>
+  <div class="tbl"><table>
+    <tr><th>Area</th><th>What Lyzr provides</th></tr>
+    <tr><td>Deployment</td><td>Reference architectures and infrastructure-as-code for EKS (Helm), Azure Container Apps (Bicep), GKE Autopilot (Terraform) and bare-metal (ArgoCD GitOps)</td></tr>
+    <tr><td>Security</td><td>Private subnets and endpoints, WAF at the edge, workload identity, your secret manager and KMS, CMK support</td></tr>
+    <tr><td>Identity</td><td>Keycloak in-cluster for SSO with your IdP over SAML, OAuth or OIDC</td></tr>
+    <tr><td>Models</td><td>Your choice of provider, in-region options (Bedrock, Azure OpenAI, Vertex) or locally hosted models</td></tr>
+    <tr><td>Networking</td><td>Private-subnet operation, NAT-based egress you can allowlist, VPC endpoints to avoid public paths</td></tr>
+    <tr><td>Operations</td><td>Autoscaling, PDBs, rolling upgrades, OpenTelemetry into your monitoring stack</td></tr>
+  </table></div>
+
+  <h3>The deployment sequence</h3>
+  <div class="tbl"><table>
+    <tr><th>Week</th><th>Focus</th><th>Activities</th></tr>
+    <tr><td><span class="mono">1</span></td><td>Discovery and alignment</td><td>Confirm environment, IdP, model choice, data sources, network posture and compliance scope. Bring security and infrastructure stakeholders in. File network-change requests now.</td></tr>
+    <tr><td><span class="mono">2</span></td><td>Network and platform bootstrap</td><td>VPC or VNet and cluster provisioning; platform services in dependency order, keys and secrets first, ingress and WAF last.</td></tr>
+    <tr><td><span class="mono">3</span></td><td>Data tier and identity</td><td>Managed databases and vector and analytics stores provisioned; SSO validated with real accounts; first data connectors configured.</td></tr>
+    <tr><td><span class="mono">4</span></td><td>Application, hardening, UAT</td><td>All services deployed; outbound traffic checked against the allowlist; encryption confirmed; logs and metrics wired to your stack; pilot on real workloads.</td></tr>
+    <tr><td><span class="mono">5</span></td><td>Go or no-go and handoff</td><td>Upgrade, rollback, backup and restore runbooks delivered; production rollout plan and ownership agreed.</td></tr>
+  </table></div>
+  <p class="muted small">Indicative only. Adjust to your own change-control cadence, especially for network and identity approvals.</p>
+
+  <h3>AWS prerequisites at a glance</h3>
+  <ul class="clean">
+    <li>EKS 1.35 with the OIDC provider and the EKS Pod Identity Agent add-on enabled (Pod Identity is used, not IRSA).</li>
+    <li>System nodes 2 × m5.large; app nodes 2 to 20 × m5.large with autoscaling.</li>
+    <li>Add-ons: AWS Load Balancer Controller, Secrets Store CSI Driver, AWS Secrets and Config Provider, KEDA, Metrics Server, Cluster Autoscaler.</li>
+    <li>Secrets Manager entries for shared and per-service secrets, ECR repositories, SQS queues, S3 buckets, an ACM wildcard certificate and wildcard DNS to the ALB.</li>
+  </ul>
+<pre><code>helm install lyzr-studio ./chart/lyzr-studio \
+  -f ./chart/lyzr-studio/values.yaml -f ./values-&lt;env&gt;.yaml \
+  --namespace lyzr-studio --timeout 10m</code></pre>
+
+  <h3>On-premises sizing reference</h3>
+  <div class="tbl"><table>
+    <tr><th>Pool</th><th>Nodes</th><th>Per node</th><th>Runs</th></tr>
+    <tr><td>Control plane</td><td>3</td><td>4 vCPU, 8 GiB, 100 GB SSD</td><td>Kubernetes control plane</td></tr>
+    <tr><td>App workers</td><td>4</td><td>8 vCPU, 32 GiB, 200 GB SSD</td><td>Lyzr services, ingress</td></tr>
+    <tr><td>Data workers</td><td>3</td><td>16 vCPU, 64 GiB, 2 TB NVMe</td><td>PostgreSQL, MongoDB, Qdrant, ClickHouse, Redis, Keycloak</td></tr>
+    <tr><td>Ops workers</td><td>2</td><td>4 vCPU, 16 GiB, 500 GB SSD</td><td>Monitoring, logging, secrets, registry, GitOps, object store</td></tr>
+  </table></div>
+  <p class="muted small">About 108 vCPU and 416 GiB in total, with roughly 2× headroom over steady state. On-prem LLM inference needs a separate GPU sizing exercise. See Fig 6.4 in chapter 06 for how the pools fit together.</p>
+
+  <h3>Things to line up early</h3>
+  <ul class="clean">
+    <li><b>Firewall and proxy changes</b> usually go through change control and can take weeks.</li>
+    <li><b>Secrets.</b> Services need many per-service keys; have your secrets and IAM team ready to provision them before install.</li>
+    <li><b>Model access.</b> Confirm whether outbound calls to public model APIs are allowed, and choose an in-region or self-hosted fallback if not.</li>
+    <li><b>Identity mapping</b> of directory groups to roles often involves a separate IAM queue.</li>
+    <li><b>Written success criteria</b>, agreed with security and architecture as well as the business sponsor.</li>
+  </ul>
+  <div class="note"><span class="mono">Before you finalise scope</span><p>Exact service counts, versions and sizing evolve between releases. Lyzr's Solutions Architecture team will confirm the current bill of materials and an infrastructure cost estimate for your region and scale.</p></div>
+</section>
+
+<!-- 13 -->
+<section class="ch" id="get-started">
+  <div class="mono ch-num">Chapter 13 · Go live</div>
+  <h2>Getting started checklist</h2>
+  <p class="lead">A suggested path through your first weeks. Tick items as you go; your progress is saved in this browser.</p>
+  <ul class="check" id="checklist">
+    <li data-k="c1"><span class="box"></span><span class="t">Sign in at <a href="https://studio.lyzr.ai">studio.lyzr.ai</a> and copy an API key from Account and API Keys</span></li>
+    <li data-k="c2"><span class="box"></span><span class="t">Build and test a first agent with a knowledge base in the Playground</span></li>
+    <li data-k="c3"><span class="box"></span><span class="t">Add your own model credentials and configure fallback models</span></li>
+    <li data-k="c4"><span class="box"></span><span class="t">Create a Responsible AI policy with PII, prompt injection and the compliance frameworks you need, and attach it</span></li>
+    <li data-k="c5"><span class="box"></span><span class="t">Call the agent from your backend over the REST API or ADK, with session_id and user_id</span></li>
+    <li data-k="c6"><span class="box"></span><span class="t">Set up roles, sub-accounts and rate limits for your teams</span></li>
+    <li data-k="c7"><span class="box"></span><span class="t">Run a Simulation Engine evaluation before going live</span></li>
+    <li data-k="c8"><span class="box"></span><span class="t">Connect the agent to Git and set up a non-prod branch</span></li>
+    <li data-k="c9"><span class="box"></span><span class="t">Decide on SaaS or private deployment, and if private, start the network and identity requests</span></li>
+  </ul>
+
+  <h3>Resources</h3>
+  <div class="grid g3">
+    <div class="card"><span class="mono">Learn</span><h4>Documentation</h4><p>Concepts, guides and the full API reference.</p><div class="links"><a href="https://docs.lyzr.ai/">docs.lyzr.ai</a></div></div>
+    <div class="card"><span class="mono">Build</span><h4>ADK and API</h4><p>Manage agents programmatically from Python.</p><div class="links"><a href="https://docs.lyzr.ai/enterprise/adk/overview">ADK overview</a> · <a href="https://docs.lyzr.ai/enterprise/api/agents/introduction">API</a></div></div>
+    <div class="card"><span class="mono">Watch</span><h4>Tutorials</h4><p>Video walkthroughs of features and use cases.</p><div class="links"><a href="https://www.lyzr.ai/tutorials">lyzr.ai/tutorials</a></div></div>
+    <div class="card"><span class="mono">Ask</span><h4>Support</h4><p>Around the clock, at support@lyzr.ai</p><div class="links"><a href="mailto:support@lyzr.ai">support@lyzr.ai</a></div></div>
+    <div class="card"><span class="mono">Join</span><h4>Community</h4><p>Builders, questions and announcements.</p><div class="links"><a href="https://discord.gg/uaHrgJQxAv">Discord</a></div></div>
+    <div class="card"><span class="mono">Track</span><h4>Changelog</h4><p>What has shipped in Agent Studio.</p><div class="links"><a href="https://docs.lyzr.ai/enterprise/agent-studio/changelog">Changelog</a></div></div>
+  </div>
+</section>
+
+</div>
+</main>
+
+<script>
+(function(){
+  var sections=[].slice.call(document.querySelectorAll('section.ch'));
+  var links={};
+  [].slice.call(document.querySelectorAll('aside nav a')).forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+
+  // prev/next pagers
+  sections.forEach(function(s,i){
+    var p=document.createElement('div');p.className='pager';
+    function mk(sec,cls,label){
+      var a=document.createElement('a');a.href='#'+sec.id;a.className=cls;
+      a.innerHTML='<span class="mono">'+label+'</span>'+sec.querySelector('h2').textContent;return a;}
+    p.appendChild(i>0?mk(sections[i-1],'prev','Previous'):document.createElement('span'));
+    p.appendChild(i<sections.length-1?mk(sections[i+1],'next','Next'):document.createElement('span'));
+    s.appendChild(p);
+  });
+
+  var bar=document.getElementById('progress');
+  function onScroll(){
+    var h=document.documentElement;var max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+    var cur=null;
+    sections.forEach(function(s){if(s.getBoundingClientRect().top<160)cur=s.id;});
+    var passed=true;
+    Object.keys(links).forEach(function(id){
+      var a=links[id];a.classList.toggle('active',id===cur);
+      if(id===cur)passed=false;
+      a.classList.toggle('done',passed&&cur!==null);
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // mobile menu
+  var side=document.getElementById('side');
+  document.getElementById('menuBtn').addEventListener('click',function(){side.classList.toggle('open');});
+  side.addEventListener('click',function(e){if(e.target.closest('a'))side.classList.remove('open');});
+
+  // architecture tabs
+  [].slice.call(document.querySelectorAll('.tabs button')).forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.getAttribute('data-tab');
+      [].slice.call(document.querySelectorAll('.tabs button')).forEach(function(x){x.classList.toggle('on',x===b);});
+      [].slice.call(document.querySelectorAll('.tabpane')).forEach(function(p){p.classList.toggle('on',p.getAttribute('data-pane')===t);});
+    });
+  });
+
+  // lightbox
+  var lb=document.getElementById('lb'),lbImg=lb.querySelector('img');
+  [].slice.call(document.querySelectorAll('figure .frame img')).forEach(function(im){
+    im.addEventListener('click',function(){lbImg.src=im.src;lbImg.alt=im.alt;lb.classList.add('on');});
+  });
+  lb.addEventListener('click',function(){lb.classList.remove('on');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('on');});
+
+  // checklist
+  var store={};
+  try{store=JSON.parse(localStorage.getItem('lyzr-guide-check')||'{}');}catch(e){}
+  [].slice.call(document.querySelectorAll('#checklist li')).forEach(function(li){
+    var k=li.getAttribute('data-k');if(store[k])li.classList.add('on');
+    li.addEventListener('click',function(e){
+      if(e.target.closest('a'))return;
+      li.classList.toggle('on');store[k]=li.classList.contains('on');
+      try{localStorage.setItem('lyzr-guide-check',JSON.stringify(store));}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
